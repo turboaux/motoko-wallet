@@ -1,0 +1,62 @@
+:host {
+    display: block;
+    height: 100vh;
+}
+
+.header {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+.navbar__items {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.balance-section {
+    padding: 2rem 0;
+}
+
+.balance-card {
+    background-color: var(--surface-a);
+    width: 60%;
+    min-width: 400px;
+    padding: 2em;
+    border-radius: 10px;
+
+    &__title {
+        display: block;
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+    }
+
+    &__balance {
+        font-size: 4.5rem;
+        text-align: center;
+        margin-bottom: .5rem;
+    }
+
+    &__principal {
+        display: block;
+        font-size: 1rem;
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    &__money {
+        flex: 1;
+    }
+
+    &__symbol {
+        font-size: 1.3rem;
+    }
+}
+
+:host ::ng-deep .button-transfer {
+    button {
+        width: 100%;
+        text-transform: uppercase;
+    }
+}

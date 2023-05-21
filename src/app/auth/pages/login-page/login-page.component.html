@@ -1,0 +1,8 @@
+<div class="text-center">
+  <h1 class="mb-4 text-6xl">Your MotokoCoin Wallet</h1>
+  <p-button (click)="logIn()" label="Log In" icon="pi pi-wallet" styleClass="p-button-warning p-button-text p-button-lg"></p-button>
+</div>
+
+<p-dialog header="Motoko Wallet" [(visible)]="modalVisible" [style]="{width: '50vw'}" [modal]="true" [draggable]="false" [resizable]="false">
+  <p class="text-center text-xl">{{ modalMessage }}</p>
+</p-dialog>

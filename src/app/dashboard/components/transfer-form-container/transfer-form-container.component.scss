@@ -1,0 +1,43 @@
+:host {
+    display: block;
+    padding: 2rem;
+}
+
+.wallet-icon {
+    width: 9rem;
+    height: 9rem;
+
+    &--source {
+        fill: var(--yellow-500);
+    }
+
+    &--destination {
+        fill: var(--green-500);
+    }
+}
+
+.wallet-info {
+    list-style: none;
+
+    &__amount-title {
+        text-transform: uppercase;
+        font-size: 1.2rem;
+    }
+
+    &__amount {
+        font-weight: bold;
+        font-size: 2rem;
+    }
+
+    &__symbol {
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+}
+
+.wallet-arrow {
+    margin-left: 4rem;
+    margin-right: 4rem;
+}
+
+

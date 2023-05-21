@@ -1,0 +1,38 @@
+<form class="formgroup-inline flex justify-content-center" [formGroup]="transferForm" (ngSubmit)="send()" novalidate>
+    <div class="field">
+        <span class="p-float-label">
+            <p-inputNumber 
+                [ngClass]="{'ng-invalid': amountToTransferIsInvalid, 'ng-dirty': amountToTransferIsInvalid}" 
+                id="amountToTransfer" 
+                inputId="integeronly" 
+                formControlName="amountToTransfer" 
+                [min]="0" 
+                #amountToTransfer
+                (onInput)="updateAmountToTransfer(amountToTransfer.value)"></p-inputNumber>
+            <label htmlFor="amount">Amount to transfer</label>
+        </span>
+        <ng-container *ngIf="amountToTransferIsInvalid">
+            <p *ngIf="amountToTransferIsRequired" class="invalid-feedback-message"><small>Amount is required</small></p>
+            <p *ngIf="amountToTransferTooSmall" class="invalid-feedback-message"><small>Amount must be greater than $0</small></p>
+            <p *ngIf="amountToTransferNotEnough" class="invalid-feedback-message"><small>Not enough tokens</small></p>
+        </ng-container>
+    </div>
+
+    <div class="field">
+        <span class="p-float-label">
+            <input 
+                [ngClass]="{'ng-invalid': targetPrincipalIsInvalid, 'ng-dirty': targetPrincipalIsInvalid}" 
+                type="text" pInputText 
+                id="targetPrincipal" 
+                formControlName="targetPrincipal" 
+                #targetPrincipal 
+                (input)="updateTargetPrincipal(targetPrincipal.value)"/>
+            <label htmlFor="targetPrincipal">Target principal</label>
+        </span>
+        <ng-container *ngIf="targetPrincipalIsInvalid">
+            <p *ngIf="targetPrincipalIsRequired" class="invalid-feedback-message"><small>Principal required</small></p>
+        </ng-container>
+    </div>
+
+    <button pButton pRipple type="submit" class="p-button-primary">Send <i class="pi pi-send ml-2"></i></button>
+</form>

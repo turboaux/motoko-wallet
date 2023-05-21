@@ -1,0 +1,47 @@
+{
+    "canisters": {
+        "backend": {
+            "main": "src/backend/main.mo",
+            "type": "motoko"
+        },
+        "www": {
+            "dependencies": [
+                "backend"
+            ],
+            "frontend": {
+                "entrypoint": "dist/motoko_wallet/index.html"
+            },
+            "source": [
+                "dist/motoko_wallet"
+            ],
+            "type": "assets"
+        },
+        "internet_identity": {
+            "type": "custom",
+            "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
+            "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz",
+            "shrink": false,
+            "remote": {
+                "candid": "internet_identity.did",
+                "id": {
+                    "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+                }
+            }
+        }
+    },
+    "dfx": "0.14.0",
+    "defaults": {
+        "build": {
+            "args": "",
+            "packtool": "npm run --silent sources"
+        }
+    },
+    "networks": {
+        "local": {
+            "bind": "127.0.0.1:8000",
+            "type": "ephemeral"
+        }
+    },
+    "output_env_file": ".env",
+    "version": 1
+  }

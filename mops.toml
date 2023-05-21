@@ -1,0 +1,3 @@
+[dependencies]
+base = "0.8.7"
+json = "https://github.com/aviate-labs/json.mo#main"

@@ -1,0 +1,40 @@
+<header class="header">
+    <div class="container">
+        <nav class="navbar">
+            <ul class="navbar__items">
+                <li class="navbar__item text-xl text-yellow-500 mr-auto">
+                    <span class="pi pi-user mr-1"></span>
+                    {{ userPrincipal }}
+                </li>
+                <li class="navbar__item ml-3"><p-button icon="pi pi-power-off" pTooltip="Log out" tooltipPosition="bottom" styleClass="p-button-rounded" (click)="logOut()"></p-button></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section class="balance-section">
+    <div class="container flex justify-content-center align-items-center">
+        <article class="balance-card">
+            <span class="balance-card__title">Cryto Wallet Balance</span>
+            <p class="balance-card__balance flex justify-content-center align-items-center">
+                <ng-container *ngIf="isWalletInfoLoaded; else loading">
+                    <span class="balance-card__money">${{ userBalance | number:'1.0':'en' }}.00</span>
+                    <span class="balance-card__symbol">MOC</span>
+                </ng-container>
+                
+                <ng-template #loading>
+                    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+                </ng-template>
+            </p>
+            <span class="balance-card__principal">{{ userPrincipal }}</span>
+            
+            <p-button class="button-transfer" label="Transfer" (click)="popUpTransfer()" styleClass="p-button-success p-button-lg"></p-button>
+        </article>
+    </div>
+</section>
+
+<section class="activity-section">
+</section>
+
+
+<p-toast key="dashboard-notifications"></p-toast>

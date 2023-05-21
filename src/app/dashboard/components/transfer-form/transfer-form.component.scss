@@ -1,0 +1,9 @@
+/* This has to be done cause p-inputNumber component has this bug: it doesn't apply error color to placeholder when it is invalid */
+.p-float-label > .ng-invalid.ng-dirty + span + label {
+    color: #f19ea6;
+}
+
+.invalid-feedback-message {
+    color: #f19ea6;
+    margin-top: 5px;
+}
