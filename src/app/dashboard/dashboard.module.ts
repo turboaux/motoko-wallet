@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
+import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { TooltipModule } from 'primeng/tooltip';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
@@ -28,6 +29,7 @@ import { TransferFormContainerComponent } from './components/transfer-form-conta
     ButtonModule,
     InputNumberModule,
     InputTextModule,
+    TableModule,
     ToastModule,
     TooltipModule,
     DynamicDialogModule,

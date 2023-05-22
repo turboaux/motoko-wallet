@@ -6,8 +6,8 @@ import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.co
 import { authenticateGuard } from '@app/auth/shared/guards/authenticate.guard';
 
 const routes: Routes = [
-  // { path: '', component: DashboardPageComponent, canActivate: [authenticateGuard] }
-  { path: '', component: DashboardPageComponent }
+  { path: '', component: DashboardPageComponent, canActivate: [authenticateGuard] }
+  // { path: '', component: DashboardPageComponent }
 ];
 
 @NgModule({

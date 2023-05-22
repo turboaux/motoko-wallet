@@ -7,8 +7,8 @@ import { TestPageComponent } from './pages/test-page/test-page.component';
 import { redirectIfAuthenticatedGuard } from './shared/guards/redirect-if-authenticated.guard';
 
 const routes: Routes = [
-  // { path: 'login', component: LoginPageComponent, canActivate: [redirectIfAuthenticatedGuard] },
-  { path: 'login', component: LoginPageComponent },
+  { path: 'login', component: LoginPageComponent, canActivate: [redirectIfAuthenticatedGuard] },
+  // { path: 'login', component: LoginPageComponent },
   { path: 'test', component: TestPageComponent }
 ];
 

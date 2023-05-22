@@ -15,7 +15,7 @@ export class AuthService {
   public loggedIn$: Observable<true | string> = this.loggedInSubject.asObservable();
 
   public authClient!: AuthClient;
-  
+
   constructor() { }
 
   public initAuthClient(): Observable<AuthClient> {
@@ -36,9 +36,9 @@ export class AuthService {
     }));
   }
 
-  public getIdentity(): Identity {
-    
-    return this.authClient.getIdentity();
+  public getIdentity(): Observable<Identity> {
+
+    return from(this.IdentityAsync());
   }
 
   public logOut(authClient: AuthClient): Observable<void> {
@@ -49,5 +49,9 @@ export class AuthService {
   public isAuthenticated(authClient: AuthClient): Observable<boolean> {
     
     return from(authClient.isAuthenticated());
+  }
+
+  private async IdentityAsync() {
+    return (await this.authClient.getIdentity()) as unknown as Identity;
   }
 }

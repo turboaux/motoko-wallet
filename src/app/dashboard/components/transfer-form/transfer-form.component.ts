@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+import { PrincipalValidator } from '../../shared/validators/principal-validator';
 import { Transfer } from '../../shared/models/transfer';
 
 @Component({
@@ -25,7 +26,7 @@ export class TransferFormComponent implements OnInit {
     
     this.transferForm = this.fb.group({
       amountToTransfer: [null, [Validators.required, Validators.min(1), Validators.max(this.userBalance)]],
-      targetPrincipal: ['', Validators.required]
+      targetPrincipal: ['', [Validators.required, PrincipalValidator.mustBeValid] ]
     });
   }
 
@@ -89,5 +90,9 @@ export class TransferFormComponent implements OnInit {
 
   get targetPrincipalIsRequired() {
     return this.targetPrincipal?.hasError('required');
+  }
+
+  get targetPrincipalMustBeValid() {
+    return this.targetPrincipal?.hasError('invalid_principal');
   }
 }

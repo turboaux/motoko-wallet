@@ -3,8 +3,14 @@
         <nav class="navbar">
             <ul class="navbar__items">
                 <li class="navbar__item text-xl text-yellow-500 mr-auto">
-                    <span class="pi pi-user mr-1"></span>
-                    {{ userPrincipal }}
+                    <ng-container  *ngIf="isWalletInfoLoaded; else loading">
+                        <span class="pi pi-user mr-1"></span>
+                        {{ userPrincipal }}
+                    </ng-container>
+
+                    <ng-template #loading>
+                        <span class="pi pi-spin pi-spinner" style="font-size: 2rem"></span>
+                    </ng-template>
                 </li>
                 <li class="navbar__item ml-3"><p-button icon="pi pi-power-off" pTooltip="Log out" tooltipPosition="bottom" styleClass="p-button-rounded" (click)="logOut()"></p-button></li>
             </ul>
@@ -28,13 +34,41 @@
             </p>
             <span class="balance-card__principal">{{ userPrincipal }}</span>
             
-            <p-button class="button-transfer" label="Transfer" (click)="popUpTransfer()" styleClass="p-button-success p-button-lg"></p-button>
+            <p-button class="button-transfer" [disabled]="!isWalletInfoLoaded" label="Transfer" (click)="popUpTransfer()" styleClass="p-button-success p-button-lg"></p-button>
         </article>
     </div>
 </section>
 
 <section class="activity-section">
-</section>
+    <div class="container">
+        <ng-container *ngIf="isWalletInfoLoaded; else loadingMessage">
+            <p-table [value]="logBook" styleClass="p-datatable-striped">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center">Origin</th>
+                        <th class="text-center">Destination</th>
+                        <th class="text-center">Amount Transferred</th>
+                        <th class="text-center">Date</th>
+                    </tr>
+                </ng-template>
 
+                <ng-template pTemplate="body" let-transaction>
+                    <tr>
+                        <td class="text-center">{{ transaction.originOwner}}</td>
+                        <td class="text-center">{{ transaction.destinationOwner }}</td>
+                        <td class="text-center">{{ transaction.transferredAmount }}</td>
+                        <td class="text-center">{{ transaction.transactionDate }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </ng-container>
+
+        <ng-template #loadingMessage>
+            <p class="text-center">
+                <span>Loading transaction history...</span>
+            </p>
+        </ng-template>
+    </div>
+</section>
 
 <p-toast key="dashboard-notifications"></p-toast>

@@ -17,11 +17,16 @@ export class TestPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subskink.unsubscribe;
+    this.subskink.unsubscribe();
   }
 
   public checkAuthStatus(): void {
     this.subskink.sink = this.auth.isAuthenticated(this.auth.authClient).subscribe((res) => console.log(res));
+  }
+
+  public checkMyPrincipal(): void {
+
+    this.auth.getIdentity().subscribe((i) => console.log(i.getPrincipal().toString()));
   }
 
   public logOut(): void {

@@ -14,7 +14,11 @@
         </section>
 
         <div class="col-2 flex justify-content-center align-items-center">
-            <span class="pi pi-arrow-right text-6xl wallet-arrow text-color-secondary"></span>
+            <span *ngIf="!isTransferInProgress; else loading" class="pi pi-arrow-right text-6xl wallet-arrow text-color-secondary"></span>
+
+            <ng-template #loading>
+                <span  class="pi pi-spin pi-cog text-6xl transfer-loader text-color-secondary"></span>
+            </ng-template>
         </div>
 
         <section class="col-5">
@@ -34,7 +38,7 @@
 
 <div class="container">
     <app-transfer-form 
-        [loading]="false"
+        [loading]="isTransferInProgress"
         [userBalance]="userBalance"
         [userPrincipal]="userPrincipal"
         (onSend)="send($event)" 

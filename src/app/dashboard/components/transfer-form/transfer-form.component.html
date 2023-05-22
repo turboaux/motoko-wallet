@@ -30,9 +30,13 @@
             <label htmlFor="targetPrincipal">Target principal</label>
         </span>
         <ng-container *ngIf="targetPrincipalIsInvalid">
-            <p *ngIf="targetPrincipalIsRequired" class="invalid-feedback-message"><small>Principal required</small></p>
+            <p *ngIf="targetPrincipalIsRequired; else targetPrincipalMustBeValid" class="invalid-feedback-message"><small>Principal required</small></p>    
+            
+            <ng-template #targetPrincipalMustBeValid>
+                <p *ngIf="targetPrincipalMustBeValid" class="invalid-feedback-message"><small>Enter a valid Principal</small></p>
+            </ng-template>
         </ng-container>
     </div>
 
-    <button pButton pRipple type="submit" class="p-button-primary">Send <i class="pi pi-send ml-2"></i></button>
+    <button pButton pRipple type="submit" class="p-button-primary" [disabled]="loading">Send <i class="pi pi-send ml-2"></i></button>
 </form>

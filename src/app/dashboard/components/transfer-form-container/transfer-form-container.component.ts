@@ -1,7 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
+import { SubSink } from 'subsink';
 
+import { WalletService } from '../../shared/services/wallet.service';
 import { Transfer } from '../../shared/models/transfer';
+import { TransferError} from '../../shared/errors/transfer-error';
 
 @Component({
   selector: 'app-transfer-form-container',
@@ -14,11 +17,15 @@ export class TransferFormContainerComponent implements OnInit, OnDestroy {
   public userPrincipal: string = '';
   public amountToTransfer: number = 0;
   public targetPrincipal: string = '';
+  public isTransferInProgress: boolean = false;
   private targetPrincipalPlaceholder = 'xxxx-xxxx-xxxx-xxx-xxx';
+
+  private subskink = new SubSink();
 
   constructor(
     private readonly dialogRef: DynamicDialogRef,
-    private readonly dialogConfig: DynamicDialogConfig
+    private readonly dialogConfig: DynamicDialogConfig,
+    private readonly wallet: WalletService
   ) { }
 
   ngOnInit(): void {
@@ -33,22 +40,30 @@ export class TransferFormContainerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     
-  }
-
-  close(transfer: Transfer): void {
-
-    this.dialogRef.close(transfer);
+    this.subskink.unsubscribe();
   }
 
   send(transfer: Partial<Transfer>): void {
 
-    const foo : Transfer = {
-      userPrincipal: this.userPrincipal,
-      targetPrincipal: transfer.targetPrincipal as string,
-      amountToTransfer: transfer.amountToTransfer as number,
-    };
+    this.isTransferInProgress = true;
 
-    this.close(foo);
+    this.subskink.sink = this.wallet.transfer(
+      this.userPrincipal, 
+      transfer.targetPrincipal as string,
+      transfer.amountToTransfer as number).subscribe({
+        next: (result) => {
+
+          const { userPrincipal, targetPrincipal, amountToTransfer } = result;
+
+          this.isTransferInProgress = false;
+          this.close({ userPrincipal, targetPrincipal, amountToTransfer } as Transfer);
+        },
+        error: (err: TransferError) => {
+
+          this.isTransferInProgress = false;
+          this.close(err)
+        }
+      });
   }
 
   updateAmountToTransfer(amount: number): void {
@@ -59,5 +74,10 @@ export class TransferFormContainerComponent implements OnInit, OnDestroy {
   updateTargetPrincipal(principal: string): void {
 
     this.targetPrincipal = principal || this.targetPrincipalPlaceholder;
+  }
+
+  close(transfer: Transfer | TransferError): void {
+
+    this.dialogRef.close(transfer);
   }
 }
