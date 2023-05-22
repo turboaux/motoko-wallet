@@ -42,21 +42,23 @@
 <section class="activity-section">
     <div class="container">
         <ng-container *ngIf="isWalletInfoLoaded; else loadingMessage">
-            <p-table [value]="logBook" styleClass="p-datatable-striped">
+            <p-table [value]="logBook">
                 <ng-template pTemplate="header">
                     <tr>
                         <th class="text-center">Origin</th>
                         <th class="text-center">Destination</th>
                         <th class="text-center">Amount Transferred</th>
+                        <th class="text-center">Transaction type</th>
                         <th class="text-center">Date</th>
                     </tr>
                 </ng-template>
 
                 <ng-template pTemplate="body" let-transaction>
-                    <tr>
-                        <td class="text-center">{{ transaction.originOwner}}</td>
+                    <tr [ngClass]="{'row-received': transaction.transactionType === 'received'}">
+                        <td class="text-center">{{ transaction.originOwner }}</td>
                         <td class="text-center">{{ transaction.destinationOwner }}</td>
                         <td class="text-center">{{ transaction.transferredAmount }}</td>
+                        <td class="text-center font-semibold" [className]="transaction.transactionType === 'received' ? 'text-yellow-500' : 'text-green-500'">{{ transaction.transactionType }}</td>
                         <td class="text-center">{{ transaction.transactionDate }}</td>
                     </tr>
                 </ng-template>

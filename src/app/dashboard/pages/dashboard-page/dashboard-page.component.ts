@@ -116,7 +116,7 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     const { userPrincipal:originOwner, targetPrincipal:destinationOwner, amountToTransfer:transferredAmount } = transfer;
     const transactionDate = new Date();
 
-    const transaction = { originOwner, destinationOwner, transferredAmount, transactionDate } as Transaction;
+    const transaction = { originOwner, destinationOwner, transferredAmount, transactionDate, transactionType: 'dispatched' } as Transaction;
 
     return [ transaction, ...this.logBook ];
   }

@@ -3,11 +3,16 @@ import Nat "mo:base/Nat";
 import Time "mo:base/Time";
 
 module {
+  public type TransactionType = {
+    #Dispatched;
+    #Received;
+  };
   public type Time = Time.Time;
   public type Transaction = {
     originOwner: Principal;
     destinationOwner : Principal;
     transferredAmount : Nat;
     transactionDate : Time;
+    transactionType: TransactionType;
   };
 };

@@ -3,4 +3,5 @@ export interface Transaction {
     destinationOwner: string;
     transferredAmount: number;
     transactionDate: Date;
+    transactionType: string;
 };

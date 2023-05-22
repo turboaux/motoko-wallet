@@ -64,3 +64,7 @@
         text-transform: uppercase;
     }
 }
+
+:host ::ng-deep .row-received {
+    background-color: #2A324D !important;
+}

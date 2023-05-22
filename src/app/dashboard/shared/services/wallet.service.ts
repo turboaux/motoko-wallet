@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, from, pipe } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 import { Principal } from '@dfinity/principal';
 import { Identity, ActorSubclass } from '@dfinity/agent';
@@ -79,7 +79,7 @@ export class WalletService {
 
         return from(this.motokoWalletActor(userIdentity).getLogBook(accountFrom))
           .pipe(
-            map((logBook) => JSON.parse(logBook) as Transaction[]), 
+            map((logBook) => JSON.parse(logBook)), 
             map((logBook) => {
 
               return logBook.map((log: any) => {
@@ -88,8 +88,9 @@ export class WalletService {
                 const destinationOwner: string = log.destinationOwner;
                 const transferredAmount: number = +log.transferredAmount;
                 const transactionDate: Date = new Date(log.transactionDate / 1000000);
-  
-                return { originOwner, destinationOwner, transferredAmount, transactionDate } as Transaction;
+                const transactionType: string = log.transactionType;
+
+                return { originOwner, destinationOwner, transferredAmount, transactionDate, transactionType} as Transaction;
               });
             }),
           );

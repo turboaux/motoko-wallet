@@ -18,10 +18,10 @@ actor MotokoWallet {
   
   public type Account = Account.Account;
   public type Transaction = Transaction.Transaction;
+  public type TransactionType = Transaction.TransactionType;
 
   let ledger : TrieMap.TrieMap<Account, Nat> = TrieMap.TrieMap(Account.accountsEqual, Account.accountsHash);
   let logBook : TrieMap.TrieMap<Account, Buffer.Buffer<Transaction>> = TrieMap.TrieMap(Account.accountsEqual, Account.accountsHash);
-  let transactions : Buffer.Buffer<Transaction> = Buffer.Buffer<Transaction>(0);
 
   public shared ({ caller }) func checkOrRegister(account: Account): async Text {
 
@@ -121,25 +121,52 @@ actor MotokoWallet {
     // Add it to ledger.
     ledger.put(to, (AccountToBalance + amount));
 
-    // Create a log record and Dump it in my logBook.
-    transactions.add({
-      originOwner = from.owner; 
-      destinationOwner = to.owner; 
-      transferredAmount = amount;
-      transactionDate = Time.now();
-    });
-    
-    logBook.put(from, transactions);
+    // Save transaction.
+    await logTransaction(from, to, amount);
 
     return #ok;
   };
 
+  public shared ({ caller }) func logTransaction(from : Account, to : Account, amount : Nat) : async () {
+    
+    // Get your logBook
+    let originTransactions = Option.get(logBook.get(from), Buffer.Buffer<Transaction>(0));
+    // Get the other end transactions. 
+    let destinationTransactions = Option.get(logBook.get(to), Buffer.Buffer<Transaction>(0));
+ 
+    // Sender log.
+    originTransactions.add({
+      originOwner = from.owner; 
+      destinationOwner = to.owner; 
+      transferredAmount = amount;
+      transactionDate = Time.now();
+      transactionType = #Dispatched;
+    });
+    
+    logBook.put(from, originTransactions);
+
+    // Receiver log.
+    destinationTransactions.add({
+      originOwner = from.owner; 
+      destinationOwner = to.owner; 
+      transferredAmount = amount;
+      transactionDate = Time.now();
+      transactionType = #Received;
+    });
+
+    logBook.put(to, destinationTransactions);
+
+    return ();
+  };
+  
   public query func balanceOf(account : Account) : async (Nat) {
     return Option.get(ledger.get(account), 0);
   };
 
   public query func getLogBook(account : Account) : async Text {
 
+    var transactionType: Text = "";
+    
     // Get your logBook. 
     let transactions: Buffer.Buffer<Transaction> = Option.get(logBook.get(account), Buffer.Buffer<Transaction>(0));
     let transactionsReplica = Buffer.clone(transactions);
@@ -150,11 +177,18 @@ actor MotokoWallet {
 
     let transactionJSONObjects = Buffer.map<Transaction, JSON.JSON>(transactionEntries, func (t) { 
 
+      if (t.transactionType == #Dispatched) {
+        transactionType := "dispatched";
+      } else {
+        transactionType := "received";
+      };
+
       return #Object([
         ("originOwner", #String(Principal.toText(t.originOwner))),
         ("destinationOwner", #String(Principal.toText(t.destinationOwner))),
         ("transferredAmount", #String(Nat.toText(t.transferredAmount))),
         ("transactionDate", #Number(t.transactionDate)),
+        ("transactionType", #String(transactionType))
       ]);
     });
 
